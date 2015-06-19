@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.js"></script>
+</head>
+
+<body>
+	<div class="container">
+	  <h2>Major Cities</h2>
+	  <p>A list of major cities around the world</p>            
+	  <table class="table">
+	    <thead>
+	      <tr>
+	        <th>City name</th>
+	        <th>City ID</th>
+	        <th>Postal code</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <tr>
+	        <td>London</td>
+	        <td>2643743</td>
+	        <td>E - WD</td>
+	      </tr>
+	      <tr>
+	        <td>Tokyo</td>
+	        <td>1850147</td>
+	        <td>100-0005 <span style="font-style: italic">Tokyo Station *</td>
+	      </tr>
+	      <tr>
+	        <td>New York City</td>
+	        <td>5128581</td>
+	        <td>10001 - 11697</td>
+	      </tr>
+	      <tr>
+	        <td>Shanghai</td>
+	        <td>1796236</td>
+	        <td>200000 - 202100</td>
+	      </tr>
+	      <tr>
+	        <td>Los Angeles</td>
+	        <td>5368361</td>
+	        <td>90003 - 91608</td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</div>
+
+	<div class="container" style="margin-bottom: 20px">
+	  <h3>Search By</h3>
+	  	<form role="form">
+	  		<div class="form-group">
+	      		<div class="col-xs-4" style="width: 31.333333%">
+	        		<label for="ex3">City Name (country code):</label>
+	        		<div class="wrapper" style="display: inline-flex">
+	        			<input class="form-control" id="theCity" placeholder="e.g. New York City,US" type="text" style="float:left">
+	        			<button id="byName" type="button" class="btn btn-default" style="width: 81px; margin-left: 12px">Enter</button>
+	        		</div>
+	      		</div>
+	    	</div>
+	    	<div class="form-group">
+	      		<div class="col-xs-4" style="width: 31.333333%">
+	        		<label for="ex3">City ID:</label>
+	        		<div class="wrapper" style="display: inline-flex">
+	        			<input class="form-control" id="theID" placeholder="e.g. 2643743" type="text" style="float:left">
+	        			<button id="byID" type="button" class="btn btn-default" style="width: 81px; margin-left: 12px">Enter</button>
+	        		</div>
+	      		</div>
+	    	</div>
+	    	<div class="form-group">
+	      		<div class="col-xs-4" style="width: 31.333333%">
+	        		<label for="ex3">Postal code (country code):</label>
+	        		<div class="wrapper" style="display: inline-flex">
+	        			<input class="form-control" id="thePostal" placeholder="e.g. 63103,US" type="text" style="float:left">
+	        			<button id="byPostal" type="button" class="btn btn-default" style="width: 81px; margin-left: 12px">Enter</button>
+	        		</div>
+	      		</div>
+	    	</div>
+	  	</form>
+	</div>
+	
+	
+	<div class="container">
+	  <h3>Weather Data</h3>           
+	  <table class="table">
+	      <tr>
+	        <th style="border-bottom: none!important; border-top: none!important; width: 118px">City:
+	        <span id="city" style="border-bottom: none!important; border-top: none!important"></span></th>
+	      </tr>
+	      <tr>
+	        <th style="border-bottom: none!important; border-top: none!important; width: 118px">Temperature:
+	        <span id="temp" style="border-bottom: none!important; border-top: none!important"></span></th>
+	      </tr>
+	      <tr>
+	        <th style="border-bottom: none!important; border-top: none!important; width: 118px">Humidity:
+	        <span id="humidity" style="border-bottom: none!important; border-top: none!important"></span></th>
+	      </tr>
+	  </table>
+	</div>
+
+	<script type="text/javascript">	
+		$("#byName").on('click', function(){
+			var url = "http://api.openweathermap.org/data/2.5/weather?q=";
+			var aCity = document.getElementById("theCity").value;
+			var theCity = aCity.toLowerCase();
+			
+			//var country = document.getElementById("country").value;
+			//if (theCity == "london") {
+				//var search = url + theCity + ",uk";
+			//}
+			//else if (theCity == "tokyo") {
+				//var search = url + theCity + ",jp";
+			//}
+			//else if (theCity == "shanghai") {
+				//var search = url + theCity + ",cn";
+			//}
+			//else {
+				var search = url + theCity; //+ ",us";
+			//}
+
+			$.ajax(search) //have data
+
+			.then(function(data){ //do stuff with the data
+				//get data from API call
+				var _city = data.name;
+				var _temp = data.main.temp;
+				var _humidity = data.main.humidity;
+							
+				//update webpage with data
+				city.innerHTML = _city;
+				temp.innerHTML = _temp;
+				humidity.innerHTML = _humidity;
+			});
+		});
+
+		$("#byID").on('click', function(){
+			var url = "http://api.openweathermap.org/data/2.5/weather?id=";
+			var theID = document.getElementById("theID").value;
+			var search = url + theID;
+
+			$.ajax(search) //have data
+
+			.then(function(data){ //do stuff with the data
+				//get data from API call
+				var _city = data.name;
+				var _temp = data.main.temp;
+				var _humidity = data.main.humidity;
+							
+				//update webpage with data
+				city.innerHTML = _city;
+				temp.innerHTML = _temp;
+				humidity.innerHTML = _humidity;
+			});
+		});
+
+		$("#byPostal").on('click', function(){
+			var url = "http://api.openweathermap.org/data/2.5/weather?zip=";
+			var thePostal = document.getElementById("thePostal").value;
+
+			//var country = document.getElementById("country").value;
+			//if (thePostal == "london") {
+				//var search = url + thePostal + ",uk";
+			//}
+			//else if (thePostal == "876-0854") {
+				//var search = url + thePostal + ",jp";
+			//}
+			//else if (thePostal == "shanghai") {
+				//var search = url + thePostal + ",cn";
+			//}
+			//else {
+				var search = url + thePostal; //+ ",us";
+			//}
+
+			$.ajax(search) //have data
+			.then(function(data){ //do stuff with the data
+				//get data from API call
+				var _city = data.name;
+				var _temp = data.main.temp;
+				var _humidity = data.main.humidity;
+							
+				//update webpage with data
+				city.innerHTML = _city;
+				temp.innerHTML = _temp;
+				humidity.innerHTML = _humidity;
+			});
+		});
+	</script>
+
+</body>
